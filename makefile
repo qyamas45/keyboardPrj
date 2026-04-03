@@ -5,20 +5,20 @@ CXX = g++
 CXXFLAGS = -Wall -g -Wextra -std=c++11
 
 # Linker flags for OpenGL and GLFW
-LDFLAGS = -Llibs -lopengl32 -lglfw3dll freetype/objs/freetype.a
+LDFLAGS = -Llibs -lopengl32 -lglfw3dll freetype/objs/freetype.a 
 
 # Include directories
-INCLUDES = -Iinclude -I/freetype/include -I/freetype/include/freetype -Icamera.h
+INCLUDES = -Iinclude -Isrc/objects -Isrc/core -I/freetype/include -I/freetype/include/freetype -Icamera.h -Iobjects 
 
 # Target executable
 TARGET = program
 
 # Source files
-SRCS = main.cpp glad.c camera.h
+SRCS = src/main.cpp glad.c   
 
 # Object files
-OBJS = main.o glad.o
-
+OBJS = $(SRCS:.cpp=.o)
+OBJS := $(OBJS:.c=.o)
 # Default target
 all: $(TARGET)
 
@@ -27,12 +27,12 @@ $(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Rule to compile C++ source files
-main.o: main.cpp
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Rule to compile C source files
-glad.o: glad.c
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+%.o: %.c
+	g++ $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Clean up build files
 clean:
