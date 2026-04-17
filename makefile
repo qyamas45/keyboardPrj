@@ -1,6 +1,8 @@
-GLFW_PREFIX := $(shell brew --prefix glfw)
-FREETYPE_PREFIX := $(shell brew --prefix freetype)
-
+ifeq ($(OS), Darwin)
+	GLFW_PREFIX := $(shell brew --prefix glfw)
+	FREETYPE_PREFIX := $(shell brew --prefix freetype)
+ 
+endif 
 #Compiler
 CXX = g++
 
@@ -18,10 +20,7 @@ ifeq ($(OS), Darwin)
 			  -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo else LDFLAGS = -Llibs -lopengl32 -lglfw3dll freetype/objs/freetype.a endif
 else
 	 
-	LDFLAGS = -L$(GLFW_PREFIX)/lib \
-			-L$(FREETYPE_PREFIX)/lib \
-			-lglfw -lfreetype \
-			-framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+	LDFLAGS = -Llibs -lopengl32 -lglfw3dll freetype/objs/freetype.a 
 endif
 # Include directories
 INCLUDES = -Iinclude -I$(GLFW_PREFIX)/include -I$(FREETYPE_PREFIX)/include -Icamera.h
