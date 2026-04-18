@@ -1,16 +1,17 @@
-#ifndef CUBE_H
-#define CUBE_H
+#ifndef KEY_H
+#define KEY_H
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <shader.h>
 
-class Cube
+class Key
 {
 public:
-    Cube();
-    ~Cube();
+    Key();
+    ~Key();
+
     glm::vec3 position;
     glm::vec3 rotationAxis;
     float rotationAngle;
