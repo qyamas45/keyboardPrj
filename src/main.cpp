@@ -11,6 +11,8 @@
 #include "camera.h"
 #include <shader_m.h>
 #include "objects/cube.cpp"
+#include "objects/key.cpp"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -85,6 +87,8 @@ int main() {
     //};
     Cube cube1;
     Cube cube2;
+    Key key1;
+    key1.position = glm::vec3(5.0f, 0.0f, 0.0f);
     cube1.position = glm::vec3(-5.0f, 0.0f, 0.0f);
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -133,6 +137,7 @@ int main() {
         glBindVertexArray(VAO);
         cube1.Draw(ourShader);
         cube2.Draw(ourShader);
+        key1.Draw(ourShader);
         
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         
