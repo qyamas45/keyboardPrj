@@ -34,20 +34,73 @@ void Key::Draw(Shader &shader)
     model = glm::scale(model, scale);
     shader.setMat4("model", model);
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }
 
 void Key::setupMesh()
 {
     float vertices[] = {
+    //z: -0.3f
     -0.3f, -0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 0 bottom-left
      0.3f, -0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 1 bottom-right
      0.2f,  0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 2 top-right
     -0.2f,  0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 3 top-left
+
+    //sideways (left)
+    -0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 4 bottom-right                     
+    -0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 5 bottom-left
+    -0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 6 top-right
+    -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 7 top-left
+
+    //sideways (right)
+    0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 8 bottom-right                     
+    0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 9 bottom-left
+    0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 10 top-right
+    0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 11 top-left
+
+    //back
+   -0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 12 bottom-left
+    0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 13 bottom-right
+    0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 14 top-right
+   -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 15 top-left
+
+    //top
+   -0.3f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 16 top-left
+    0.3f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 17 top-right
+    0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 18 bottom-right
+   -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 19 bottom-left
+
+    //bottom
+   -0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 20 top-left
+    0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 21 top-right
+    0.2f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 22 bottom-right
+   -0.2f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f   // 23 bottom-left
 };
 unsigned int indices[] = {
+    //front
     0, 1, 2,
     0, 2, 3,
+
+    //sideways (left)
+    4, 5, 6,
+    5, 6, 7,
+
+    //sideways (right)
+    8, 9, 10,
+    9, 10, 11,
+
+    //back
+    12, 13, 14,
+    12, 14, 15,
+
+    //top
+    16, 17, 18,
+    16, 18, 19,
+    
+    //bottom
+    20, 21, 22,
+    20, 22, 23
+  
 };
 
     glGenVertexArrays(1, &VAO);
