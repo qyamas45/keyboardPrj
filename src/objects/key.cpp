@@ -126,8 +126,10 @@ void Key::Draw(Shader &shader, Letter &letter, glm::mat4 view, glm::mat4 project
         if (clip.w > 0.0f)
         {
             float screenX = (clip.x / clip.w + 1.0f) / 2.0f * 800.0f;
+            std::cout << "Screen X: " << screenX << std::endl;
             float screenY = (clip.y / clip.w + 1.0f) / 2.0f * 600.0f;
             letter.RenderText(std::string(1, label), screenX, screenY, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
-        }
     }
+        }
+        
 }

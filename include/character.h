@@ -29,10 +29,13 @@ public:
 
     void Draw(std::string text);
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
+    void RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color);
 
 private:
     unsigned int VAO, VBO;
+    unsigned int VAO3D, VBO3D;
     Shader textShader;
+    Shader text3dShader;
     void setupMesh();
 };
 #endif
