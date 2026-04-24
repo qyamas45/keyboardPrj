@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <shader.h>
+#include "character.h"
 
 enum class Alphabet{
     A = 0, B, C, D, E, F, G, H, I, J, K, 
@@ -22,7 +23,9 @@ public:
     glm::vec3 rotationAxis;
     float rotationAngle;
     glm::vec3 scale;
-    void Draw(Shader &shader);
+    char label;
+
+    void Draw(Shader &shader, Letter &letter, glm::mat4 view, glm::mat4 projection);
     void press();
     void release();
 

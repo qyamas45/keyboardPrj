@@ -1,7 +1,7 @@
 #include "key.h"
 
 
-Key::Key() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f)
+Key::Key() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f), label('\0')
 {
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -26,16 +26,7 @@ void Key::release()
 
 }
 
-void Key::Draw(Shader &shader)
-{
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, position);
-    model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis);
-    model = glm::scale(model, scale);
-    shader.setMat4("model", model);
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-}
+
 
 void Key::setupMesh()
 {
@@ -65,8 +56,8 @@ void Key::setupMesh()
    -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 15 top-left
 
     //top
-   -0.3f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 16 top-left
-    0.3f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 17 top-right
+   -0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 16 top-left
+    0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 17 top-right
     0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 18 bottom-right
    -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 19 bottom-left
 
@@ -117,4 +108,26 @@ unsigned int indices[] = {
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+}
+void Key::Draw(Shader &shader, Letter &letter, glm::mat4 view, glm::mat4 projection)
+{
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, position);
+    model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis);
+    model = glm::scale(model, scale);
+    shader.setMat4("model", model);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+    if (label != '\0')
+    {
+        // Project the key's top-center (local space) to screen coordinates
+        glm::vec4 clip = projection * view * model * glm::vec4(0.0f, 0.3f, -0.25f, 1.0f);
+        if (clip.w > 0.0f)
+        {
+            float screenX = (clip.x / clip.w + 1.0f) / 2.0f * 800.0f;
+            float screenY = (clip.y / clip.w + 1.0f) / 2.0f * 600.0f;
+            letter.RenderText(std::string(1, label), screenX, screenY, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+        }
+    }
 }

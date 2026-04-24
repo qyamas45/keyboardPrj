@@ -1,10 +1,17 @@
 #ifndef CUBE_H
 #define CUBE_H
-
+ 
+#include <string>
+#include <map>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <shader.h>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+ 
 
 class Cube
 {
