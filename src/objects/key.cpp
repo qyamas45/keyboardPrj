@@ -3,6 +3,7 @@
 
 Key::Key() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f), label('\0')
 {
+ 
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
     rotationAngle = 0.0f;
@@ -25,7 +26,6 @@ void Key::release()
 {
 
 }
-
 
 
 void Key::setupMesh()
@@ -64,8 +64,8 @@ void Key::setupMesh()
     //bottom
    -0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 20 top-left
     0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 21 top-right
-    0.2f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 22 bottom-right
-   -0.2f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f   // 23 bottom-left
+    0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 22 bottom-right
+   -0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f   // 23 bottom-left
 };
 unsigned int indices[] = {
     //front
@@ -109,11 +109,11 @@ unsigned int indices[] = {
     glEnableVertexAttribArray(1);
 
 }
-void Key::Draw(Shader &shader, Letter &letter, glm::mat4 view, glm::mat4 projection)
+void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
-    model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis);
+    model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::scale(model, scale);
     shader.setMat4("model", model);
     glBindVertexArray(VAO);
@@ -121,15 +121,7 @@ void Key::Draw(Shader &shader, Letter &letter, glm::mat4 view, glm::mat4 project
 
     if (label != '\0')
     {
-        // Project the key's top-center (local space) to screen coordinates
-        glm::vec4 clip = projection * view * model * glm::vec4(0.0f, 0.3f, -0.25f, 1.0f);
-        if (clip.w > 0.0f)
-        {
-            float screenX = (clip.x / clip.w + 1.0f) / 2.0f * 800.0f;
-            std::cout << "Screen X: " << screenX << std::endl;
-            float screenY = (clip.y / clip.w + 1.0f) / 2.0f * 600.0f;
-            letter.RenderText(std::string(1, label), screenX, screenY, 0.3f, glm::vec3(0.0f, 0.0f, 0.0f));
+        letter.RenderCharOnSurface(label, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f);
     }
-        }
         
 }

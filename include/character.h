@@ -20,6 +20,7 @@ struct Character {
 class Letter
 {
 public:
+    
     Letter();
     ~Letter();
 
@@ -27,9 +28,9 @@ public:
     FT_Library ft;
     std::map<GLchar, Character> Characters;
 
-    void Draw(std::string text);
+    void Draw(char);
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
-    void RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color);
+    void RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg = 0.0f);
 
 private:
     unsigned int VAO, VBO;

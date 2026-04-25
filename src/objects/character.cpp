@@ -16,9 +16,9 @@ Letter::~Letter()
     glDeleteBuffers(1, &VBO3D);
 }
 
-void Letter::Draw(std::string text)
+void Letter::Draw(char c)
 {
-    RenderText(text, 0.0f, 0.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    RenderCharOnSurface(c, glm::mat4(1.0f), glm::mat4(1.0f), glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 }
 
 void Letter::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
@@ -68,7 +68,7 @@ void Letter::RenderText(std::string text, float x, float y, float scale, glm::ve
     glDisable(GL_BLEND);
 }
 
-void Letter::RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color)
+void Letter::RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -94,15 +94,32 @@ void Letter::RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::m
     float ypos = 0.31f;
     float zpos = -0.25f + h / 2.0f;
 
-    // Quad lying flat in the XZ plane (y constant); z increases toward key front
-    float vertices[6][5] = {
-        {xpos,     ypos, zpos,     0.0f, 0.0f},
-        {xpos,     ypos, zpos - h, 0.0f, 1.0f},
-        {xpos + w, ypos, zpos - h, 1.0f, 1.0f},
+    // Rotate the four quad corners around the key-top center (0, -0.25) in the XZ plane
+    float rad  = glm::radians(angleDeg);
+    float cosA = cosf(rad);
+    float sinA = sinf(rad);
+    float cx = 0.0f, cz = -0.25f;
+    auto rotXZ = [&](float x, float z, float &rx, float &rz) {
+        float dx = x - cx, dz = z - cz;
+        rx = cx + dx * cosA - dz * sinA;
+        rz = cz + dx * sinA + dz * cosA;
+    };
 
-        {xpos,     ypos, zpos,     0.0f, 0.0f},
-        {xpos + w, ypos, zpos - h, 1.0f, 1.0f},
-        {xpos + w, ypos, zpos,     1.0f, 0.0f}
+    float x0, z0, x1, z1, x2, z2, x3, z3;
+    rotXZ(xpos,     zpos,     x0, z0);   // top-left
+    rotXZ(xpos,     zpos - h, x1, z1);   // bottom-left
+    rotXZ(xpos + w, zpos - h, x2, z2);   // bottom-right
+    rotXZ(xpos + w, zpos,     x3, z3);   // top-right
+
+    // Quad lying flat in the XZ plane (y constant), rotated around key-top center
+    float vertices[6][5] = {
+        {x0, ypos, z0, 0.0f, 0.0f},
+        {x1, ypos, z1, 0.0f, 1.0f},
+        {x2, ypos, z2, 1.0f, 1.0f},
+
+        {x0, ypos, z0, 0.0f, 0.0f},
+        {x2, ypos, z2, 1.0f, 1.0f},
+        {x3, ypos, z3, 1.0f, 0.0f}
     };
 
     glBindTexture(GL_TEXTURE_2D, ch.TextureID);
@@ -174,16 +191,7 @@ void Letter::setupMesh()
     }
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    // VAO/VBO for 2D screen-space text (6 vertices x vec4: xy + uv)
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+ 
 
     // VAO3D/VBO3D for 3D surface text (6 vertices x 5 floats: vec3 pos + vec2 uv)
     glGenVertexArrays(1, &VAO3D);

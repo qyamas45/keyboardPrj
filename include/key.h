@@ -7,15 +7,10 @@
 #include <shader.h>
 #include "character.h"
 
-enum class Alphabet{
-    A = 0, B, C, D, E, F, G, H, I, J, K, 
-    L, M, N, O, P, Q, R, S, T, U, V, W, 
-    X, Y, Z
-};
-
 class Key
 {
 public:
+    Letter letter;
     Key();
     ~Key();
 
@@ -25,11 +20,12 @@ public:
     glm::vec3 scale;
     char label;
 
-    void Draw(Shader &shader, Letter &letter, glm::mat4 view, glm::mat4 projection);
+    void Draw(Shader &shader, glm::mat4 view, glm::mat4 projection);
     void press();
     void release();
 
 private:
+    unsigned int VAO3D, VBO3D;
     unsigned int VAO, VBO, EBO;
     void setupMesh();
 };

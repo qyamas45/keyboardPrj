@@ -141,8 +141,7 @@ int main() {
         glBindVertexArray(VAO);
         cube1.Draw(ourShader);
         cube2.Draw(ourShader);
-        key1.Draw(ourShader, letter1, view, projection);
-        letter1.Draw("Hello World");
+        key1.Draw(ourShader, view, projection);
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         
 
