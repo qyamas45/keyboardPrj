@@ -1,5 +1,5 @@
 #include "key.h"
-
+#include "inputManager.h"   
 
 Key::Key() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f), label('\0')
 {
@@ -17,10 +17,6 @@ Key::~Key()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-}
-void Key::press()
-{
-
 }
 void Key::release()
 {
@@ -124,4 +120,23 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
         letter.RenderCharOnSurface(label, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f);
     }
         
+}
+void Key::press(int action, int key)
+{
+ 
+    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+    {
+        std::cout << "TEST";
+    }
+}
+
+void Key::keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    inputManager* manager = static_cast<inputManager*>(glfwGetWindowUserPointer(window));
+    if (manager)
+    {
+        manager->handleKey(key, action);
+    }
+
+    
 }

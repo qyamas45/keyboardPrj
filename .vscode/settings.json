@@ -63,5 +63,6 @@
         "ratio": "cpp",
         "fstream": "cpp"
     },
-    "cmake.sourceDirectory": "C:/Users/alyam.DESKTOP-IIFDR2L/Desktop/keyboard_prj/keyboardPrj/freetype"
+    "cmake.sourceDirectory": "C:/Users/alyam.DESKTOP-IIFDR2L/Desktop/keyboard_prj/keyboardPrj/freetype",
+    "C_Cpp.errorSquiggles": "disabled"
 }

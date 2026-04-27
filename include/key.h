@@ -6,14 +6,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <shader.h>
 #include "character.h"
-
+#include <iostream>
 class Key
 {
 public:
     Letter letter;
     Key();
     ~Key();
-
+ 
     glm::vec3 position;
     glm::vec3 rotationAxis;
     float rotationAngle;
@@ -21,9 +21,9 @@ public:
     char label;
 
     void Draw(Shader &shader, glm::mat4 view, glm::mat4 projection);
-    void press();
+    void press(int, int);
+    static void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
     void release();
-
 private:
     unsigned int VAO3D, VBO3D;
     unsigned int VAO, VBO, EBO;

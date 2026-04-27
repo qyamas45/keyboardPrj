@@ -13,7 +13,7 @@
 #include "objects/cube.cpp"
 #include "objects/key.cpp"
 #include "objects/character.cpp"
-
+#include "inputManager.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -90,7 +90,8 @@ int main() {
     Cube cube2;
     Key key1;
     Letter letter1;
-
+    //inputManager manager;
+    //manager.keys.push_back(&key1);    
     key1.position = glm::vec3(5.0f, 0.0f, 0.0f);
     key1.label = 'A';
     cube1.position = glm::vec3(-5.0f, 0.0f, 0.0f);
@@ -123,7 +124,12 @@ int main() {
         lastFrame = currentFrame;
 
         //input
+        //input handler Manager
+        glfwSetWindowUserPointer(window, &manager);
+        
         processInput(window);
+        glfwSetKeyCallback(window, Key::keyCallBack);
+
         //render
       
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
