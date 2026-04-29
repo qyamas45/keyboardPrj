@@ -8,10 +8,11 @@
 #include <shader.h>
 #include "key.h"
 
-enum class Alphabet{
+enum class keyboardKey{
     A = 0, B, C, D, E, F, G, H, I, J, K, 
     L, M, N, O, P, Q, R, S, T, U, V, W, 
-    X, Y, Z
+    X, Y, Z, ENTER, SPACE, BACKSPACE, SHIFT, CTRL, ALT
+        
 };
 
 
@@ -20,8 +21,8 @@ public:
     keyboard();
     ~keyboard();
     void Draw(Shader &shader);
-    void pressKey(Alphabet key);
-    void releaseKey(Alphabet key);
+    void pressKey(keyboardKey key);
+    void releaseKey(keyboardKey key);
 private:
     unsigned int VAO, VBO, EBO;
     void setupMesh();

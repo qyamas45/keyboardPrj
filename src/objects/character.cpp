@@ -16,9 +16,10 @@ Letter::~Letter()
     glDeleteBuffers(1, &VBO3D);
 }
 
-void Letter::Draw(char c)
+void Letter::Draw(std::string* c)
 {
-    RenderCharOnSurface(c, glm::mat4(1.0f), glm::mat4(1.0f), glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+ 
+    RenderCharOnSurface(c, glm::mat4(1.0f), glm::mat4(1.0f), glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 90.0f);
 }
 
 void Letter::RenderText(std::string text, float x, float y, float scale, glm::vec3 color)
@@ -68,34 +69,23 @@ void Letter::RenderText(std::string text, float x, float y, float scale, glm::ve
     glDisable(GL_BLEND);
 }
 
-void Letter::RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg)
+void Letter::RenderCharOnSurface(std::string* c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    //setup textures
     text3dShader.use();
     text3dShader.setMat4("model", model);
     text3dShader.setMat4("view", view);
     text3dShader.setMat4("projection", projection);
     text3dShader.setVec3("textColor", color);
-
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO3D);
-
-    Character ch = Characters[(GLchar)c];
-
-    // Scale from pixel space to key-local world units
-    float s = 0.005f;
-    float w = ch.Size.x * s;
-    float h = ch.Size.y * s;
-
-    // Center the glyph on the key top face (0, 0.31, -0.25) — y slightly above surface
-    float xpos = -w / 2.0f;
-    float ypos = 0.31f;
-    float zpos = -0.25f + h / 2.0f;
-
+ 
     // Rotate the four quad corners around the key-top center (0, -0.25) in the XZ plane
-    float rad  = glm::radians(angleDeg);
+    float rad = glm::radians(angleDeg);
+    float s = 0.005f;
     float cosA = cosf(rad);
     float sinA = sinf(rad);
     float cx = 0.0f, cz = -0.25f;
@@ -104,30 +94,50 @@ void Letter::RenderCharOnSurface(char c, glm::mat4 model, glm::mat4 view, glm::m
         rx = cx + dx * cosA - dz * sinA;
         rz = cz + dx * sinA + dz * cosA;
     };
+    float totalWidth = 0.0f;
+    for (char ch : *c)
+        totalWidth += (Characters[ch].Advance >> 6) * s;
 
-    float x0, z0, x1, z1, x2, z2, x3, z3;
-    rotXZ(xpos,     zpos,     x0, z0);   // top-left
-    rotXZ(xpos,     zpos - h, x1, z1);   // bottom-left
-    rotXZ(xpos + w, zpos - h, x2, z2);   // bottom-right
-    rotXZ(xpos + w, zpos,     x3, z3);   // top-right
+    float xpos = -totalWidth / 2.0f; // Center the text on the key
+    float zpos = -0.15f;
+    float ypos = 0.303f; // Slightly above the key surface to prevent
+    
+    // z-fighting
+    std::string text(c->rbegin(), c->rend());
+    for (char ch: text)
+    {
+        Character chData = Characters[ch];
+        //Debugging purposes: print character and advance
+        //std::cout << "Rendering char '" << ch << "' with advance " << (chData.Advance >> 6) * s << std::endl;
 
-    // Quad lying flat in the XZ plane (y constant), rotated around key-top center
-    float vertices[6][5] = {
-        {x0, ypos, z0, 0.0f, 0.0f},
-        {x1, ypos, z1, 0.0f, 1.0f},
-        {x2, ypos, z2, 1.0f, 1.0f},
+        float w = chData.Size.x * s;
+        float h = chData.Size.y * s;
+        float xposChar = xpos + chData.Bearing.x * s;
+        float zposChar = zpos - (chData.Size.y - chData.Bearing.y) * s;
 
-        {x0, ypos, z0, 0.0f, 0.0f},
-        {x2, ypos, z2, 1.0f, 1.0f},
-        {x3, ypos, z3, 1.0f, 0.0f}
-    };
+        float x0, z0, x1, z1, x2, z2, x3, z3;
+        rotXZ(xpos,     zpos,     x0, z0);   // top-left
+        rotXZ(xpos,     zpos - h, x1, z1);   // bottom-left
+        rotXZ(xpos + w, zpos - h, x2, z2);   // bottom-right
+        rotXZ(xpos + w, zpos,     x3, z3);   // top-right
 
-    glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO3D);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+        // Quad lying flat in the XZ plane (y constant), rotated around key-top center
+        float vertices[6][5] = {
+            {x0, ypos, z0, 1.0f, 0.0f},
+            {x1, ypos, z1, 1.0f, 1.0f},
+            {x2, ypos, z2, 0.0f, 1.0f},
+            {x0, ypos, z0, 1.0f, 0.0f},
+            {x2, ypos, z2, 0.0f, 1.0f},
+            {x3, ypos, z3, 0.0f, 0.0f}
+        };
 
+        glBindTexture(GL_TEXTURE_2D, chData.TextureID);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO3D);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        xpos += (chData.Advance >> 6) * s;
+    }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_BLEND);

@@ -1,9 +1,9 @@
 #include "key.h"
 #include "inputManager.h"   
 
-Key::Key() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f), label('\0')
+Key::Key(std::string let) : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f)
 {
- 
+    label = let;
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
     rotationAngle = 0.0f;
@@ -23,45 +23,94 @@ void Key::release()
 
 }
 
+void Key::offSetSize(float& size)
+{
+   
+   if(label == "Enter")
+   {
+    size = 0.5f;
+   }
+   else if (label == "LShift")
+   {
+    
+    size = 0.65f;
+    
+   }
+   else if (label == "RShift")
+   {
+    size = 0.55f;
+   }
+   else if (label == " " )
+   {
+    size = 2.0f;
+   }
+   else if (label == "Backspace")
+   {
+    size = 0.58f;
+   }
+   else if (label == "Ctrl")
+   {
+    size = 0.5f;
+   }
+   else if (label == "Alt")
+   {
+    size = 0.5f;
+   }
+   else if (label == "Tab")
+   {
+    size = 0.53f;
+   }
+   else if (label == "CapsLock")
+   {
+    size = 0.57f;
+   }
+}
 
 void Key::setupMesh()
 {
+    float adjustedSize = 0.0f;
+    //call function to adjust the size based on the letter
+    //consider Lshift, RShift, Enter, Space, Backspace, Ctrl, Alt
+    //         Tab, CapsLock, etc. that are larger than letter keys
+    offSetSize(adjustedSize);
+    std::cout << adjustedSize << std::endl;
     float vertices[] = {
+    //front
     //z: -0.3f
-    -0.3f, -0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 0 bottom-left
-     0.3f, -0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 1 bottom-right
-     0.2f,  0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 2 top-right
-    -0.2f,  0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 3 top-left
+    -0.3f-adjustedSize, -0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 0 bottom-left
+     0.3f+adjustedSize, -0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 1 bottom-right
+     0.2f+adjustedSize,  0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 2 top-right
+    -0.2f-adjustedSize,  0.3f, 0.0f,  0.75f, 0.75f, 0.75f,  // 3 top-left
 
     //sideways (left)
-    -0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 4 bottom-right                     
-    -0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 5 bottom-left
-    -0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 6 top-right
-    -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 7 top-left
+    -0.3f-adjustedSize, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 4 bottom-right                     
+    -0.3f-adjustedSize, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 5 bottom-left
+    -0.2f-adjustedSize,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 6 top-right
+    -0.2f-adjustedSize,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 7 top-left
 
     //sideways (right)
-    0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 8 bottom-right                     
-    0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 9 bottom-left
-    0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 10 top-right
-    0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 11 top-left
+    0.3f+adjustedSize, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 8 bottom-right                     
+    0.3f+adjustedSize, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 9 bottom-left
+    0.2f+adjustedSize,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 10 top-right
+    0.2f+adjustedSize,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 11 top-left
 
     //back
-   -0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 12 bottom-left
-    0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 13 bottom-right
-    0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 14 top-right
-   -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 15 top-left
+   -0.3f-adjustedSize, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 12 bottom-left
+    0.3f+adjustedSize, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 13 bottom-right
+    0.2f+adjustedSize,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 14 top-right
+   -0.2f-adjustedSize,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,  // 15 top-left
 
     //top
-   -0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 16 top-left
-    0.2f,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 17 top-right
-    0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 18 bottom-right
-   -0.2f,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 19 bottom-left
+   -0.2f-adjustedSize,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 16 top-left
+    0.2f+adjustedSize,  0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 17 top-right
+    0.2f+adjustedSize,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 18 bottom-right
+   -0.2f-adjustedSize,  0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 19 bottom-left
 
     //bottom
-   -0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 20 top-left
-    0.3f, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 21 top-right
-    0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 22 bottom-right
-   -0.3f, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f   // 23 bottom-left
+   -0.3f-adjustedSize, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 20 top-left
+    0.3f+adjustedSize, -0.3f,  0.0f,  0.75f, 0.75f, 0.75f,  // 21 top-right
+    0.3f+adjustedSize, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f,   // 22 bottom-right
+   -0.3f-adjustedSize, -0.3f, -0.5f,  0.75f, 0.75f, 0.75f   // 23 bottom-left
 };
 unsigned int indices[] = {
     //front
@@ -114,10 +163,13 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
     shader.setMat4("model", model);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-    if (label != '\0')
+    
+    std::string* labelPtr = &label;
+    if (labelPtr)
     {
-        letter.RenderCharOnSurface(label, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f);
+        
+        letter.RenderCharOnSurface(labelPtr, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f);
+        labelPtr++;
     }
         
 }

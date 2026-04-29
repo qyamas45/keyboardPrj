@@ -88,12 +88,12 @@ int main() {
     //};
     Cube cube1;
     Cube cube2;
-    Key key1;
+    Key key1("LShift");
     Letter letter1;
     //inputManager manager;
     //manager.keys.push_back(&key1);    
     key1.position = glm::vec3(5.0f, 0.0f, 0.0f);
-    key1.label = 'A';
+ 
     cube1.position = glm::vec3(-5.0f, 0.0f, 0.0f);
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -125,10 +125,10 @@ int main() {
 
         //input
         //input handler Manager
-        glfwSetWindowUserPointer(window, &manager);
+        //glfwSetWindowUserPointer(window, &manager);
         
         processInput(window);
-        glfwSetKeyCallback(window, Key::keyCallBack);
+        //glfwSetKeyCallback(window, Key::keyCallBack);
 
         //render
       
