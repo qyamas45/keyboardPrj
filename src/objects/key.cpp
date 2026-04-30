@@ -22,10 +22,15 @@ void Key::release()
 {
 
 }
-
+void Key::setKeyType(std::string keyLabel)
+{
+    
+}
 void Key::offSetSize(float& size)
 {
-   
+   //To be honest, I was thinking more of an efficient way of doing this using switch statements
+   //and enums, but since we only have a few special keys, this is fine for now. 
+   //We can always refactor later if we add more keys with different sizes.
    if(label == "Enter")
    {
     size = 0.5f;
@@ -40,9 +45,9 @@ void Key::offSetSize(float& size)
    {
     size = 0.55f;
    }
-   else if (label == " " )
+   else if (label == " ")
    {
-    size = 2.0f;
+    size = 1.5f;
    }
    else if (label == "Backspace")
    {
@@ -73,7 +78,7 @@ void Key::setupMesh()
     //consider Lshift, RShift, Enter, Space, Backspace, Ctrl, Alt
     //         Tab, CapsLock, etc. that are larger than letter keys
     offSetSize(adjustedSize);
-    std::cout << adjustedSize << std::endl;
+    
     float vertices[] = {
     //front
     //z: -0.3f

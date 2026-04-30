@@ -13,7 +13,9 @@
 #include "objects/cube.cpp"
 #include "objects/key.cpp"
 #include "objects/character.cpp"
+#include "objects/keyboard.cpp"
 #include "inputManager.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -90,6 +92,11 @@ int main() {
     Cube cube2;
     Key key1("LShift");
     Letter letter1;
+    keyboard kb;
+    //for(auto& k: kb.keys)
+    //{
+    //    std::cout << k.label << std::endl;
+    //}
     //inputManager manager;
     //manager.keys.push_back(&key1);    
     key1.position = glm::vec3(5.0f, 0.0f, 0.0f);

@@ -1,3 +1,4 @@
 
 *.o
 .vscode/settings.json
+program.exe

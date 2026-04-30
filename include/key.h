@@ -21,10 +21,11 @@ public:
     float rotationAngle;
     glm::vec3 scale;
     std::string label;
-    void setKeyType();
-    void Draw(Shader &shader, glm::mat4 view, glm::mat4 projection);
+    void setKeyType(std::string);
+
+    void Draw(Shader&, glm::mat4, glm::mat4);
     void press(int, int);
-    static void keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void keyCallBack(GLFWwindow*, int, int, int, int);
     void release();
     void offSetSize(float&);
 private:
