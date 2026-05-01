@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 #include "fileSystem.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 struct Character {
     unsigned int TextureID; // ID handle of the glyph texture

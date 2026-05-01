@@ -26,6 +26,10 @@ void Key::setKeyType(std::string keyLabel)
 {
     
 }
+float Key::getWidth() const
+{
+    return 0.6f + 2.0f * adjustedSize; // Base width plus adjustment for special keys
+}
 void Key::offSetSize(float& size)
 {
    //To be honest, I was thinking more of an efficient way of doing this using switch statements
@@ -63,17 +67,21 @@ void Key::offSetSize(float& size)
    }
    else if (label == "Tab")
    {
-    size = 0.53f;
+    size = 0.2258f;
    }
-   else if (label == "CapsLock")
+   else if (label == "Caps Lock")
    {
     size = 0.57f;
+   }
+   else if (label == "Pipe")
+   {
+    size = 0.52f;
    }
 }
 
 void Key::setupMesh()
 {
-    float adjustedSize = 0.0f;
+    
     //call function to adjust the size based on the letter
     //consider Lshift, RShift, Enter, Space, Backspace, Ctrl, Alt
     //         Tab, CapsLock, etc. that are larger than letter keys
@@ -161,6 +169,7 @@ unsigned int indices[] = {
 }
 void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
+    shader.use();
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
     model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));

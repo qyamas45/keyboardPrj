@@ -152,9 +152,10 @@ int main() {
         ourShader.setMat4("view", view);
 
         glBindVertexArray(VAO);
-        cube1.Draw(ourShader);
-        cube2.Draw(ourShader);
-        key1.Draw(ourShader, view, projection);
+        //cube1.Draw(ourShader);
+        //cube2.Draw(ourShader);
+        kb.Draw(ourShader, view, projection);
+        //key1.Draw(ourShader, view, projection);
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         
 

@@ -23,9 +23,13 @@ keyboard::~keyboard()
     glDeleteBuffers(1, &EBO);
 }
 
-void keyboard::Draw(Shader &shader)
+void keyboard::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
-
+    for(Key& key : keys)
+    {
+ 
+        key.Draw(shader, view, projection);
+    }
 }
 void keyboard::pressKey(keyboardKey key)
 {
@@ -38,7 +42,64 @@ void keyboard::releaseKey(keyboardKey key)
 
 void keyboard::setupMesh()
 {
+    const float GAP = 0.05f; // Gap between keys
+    const float ROW_D = 0.75f; // Height of each row
+    //Define rows as indexs ranges into keys[] (matching in order)
+    //for each row:
+    //float x = rowStartX; // Starting x position for the row
+    //float z = -row * ROW_D;
+    //for each key index in row:
+    //  keys[i].position = glm::vec3(x+keys[i].getWidth()/2.0f, 0.0f, z);
+    //  x += keys[i].getWidth() + GAP; // Move x for the next key, accounting 
+    //  for the width of the current key and the gap
 
+    for (size_t i{}; i < keys.size(); ++i)
+    {
+        float x = 0.0f; // Calculate x based on the key's position in the row
+        float z = 0.0f; // Calculate z based on the row number
+        if (i < 13) // First row (ESC to F12)
+        {
+            z = 0.0f;
+            for (size_t j{}; j < i; ++j)
+            {
+                x += keys[j].getWidth() + GAP;
+            }
+        }
+        else if (i < 27) // Second row (Tab to Backspace)
+        {
+            z = ROW_D;
+            for (size_t j{13}; j < i; ++j)
+            {
+                x += keys[j].getWidth() + GAP;
+            }
+        }
+        else if (i < 41) // Third row (Caps Lock to Enter)
+        {
+            z = 2 * ROW_D;
+            for (size_t j{27}; j < i; ++j)
+            {
+                x += keys[j].getWidth() + GAP;
+            }
+        }
+        else if (i < 52) // Fourth row (Left Shift to Right Shift)
+        {
+            z = 3 * ROW_D;
+            for (size_t j{41}; j < i; ++j)
+            {
+                x += keys[j].getWidth() + GAP;
+            }
+        }
+        else // Fifth row (Left Ctrl to Right Ctrl)
+        {
+            z = 4 * ROW_D;
+            for (size_t j{52}; j < i; ++j)
+            {
+                x += keys[j].getWidth() + GAP;
+            }
+        }
+        //std::cout << "Key: " << keys[i].label << ", x: " << x << ", y: " << y << std::endl; // Debug output
+        keys[i].position = glm::vec3(x + keys[i].getWidth() / 2.0f, 0.0f, z);
+    }
 }
 
 //Util function
@@ -78,9 +139,12 @@ std::string keyboard::keyToLabel(keyboardKey key)
         case keyboardKey::ENTER: return "Enter";
         case keyboardKey::SPACE: return " ";
         case keyboardKey::BACKSPACE: return "Backspace";
-        case keyboardKey::SHIFT: return "Shift";
-        case keyboardKey::CTRL: return "Ctrl";
-        case keyboardKey::ALT: return "Alt";
+        case keyboardKey::RSHIFT: return "RShift";
+        case keyboardKey::LSHIFT: return "LShift";
+        case keyboardKey::LCTRL: return  "Ctrl";
+        case keyboardKey::RCTRL: return  "Ctrl";
+        case keyboardKey::LEFTALT: return "Alt";
+        case keyboardKey::RIGHTALT: return "Alt";
         case keyboardKey::F1: return "F1";
         case keyboardKey::F2: return "F2";
         case keyboardKey::F3: return "F3";

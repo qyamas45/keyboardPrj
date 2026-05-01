@@ -28,11 +28,11 @@ INCLUDES = -Iinclude -I$(GLFW_PREFIX)/include -I$(FREETYPE_PREFIX)/include -Icam
 # Target executable
 TARGET = program
 
-# Source files
-SRCS =  src/main.cpp glad.c src/camera.h
+# Source files (objects/*.cpp are #included by main.cpp, not compiled separately)
+SRCS = src/main.cpp glad.c
 
-# Object files	
-OBJS = src/main.o  glad.o
+# Object files
+OBJS = src/main.o glad.o
 
 # Default target
 all: $(TARGET)
@@ -42,11 +42,11 @@ $(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Rule to compile C++ source files
-src/main.o: src/main.cpp
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Rule to compile C source files
-glad.o: glad.c
+%.o: %.c
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Clean up build files
