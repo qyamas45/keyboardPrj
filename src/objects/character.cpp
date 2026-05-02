@@ -69,12 +69,12 @@ void Letter::RenderText(std::string text, float x, float y, float scale, glm::ve
     glDisable(GL_BLEND);
 }
 
-void Letter::RenderCharOnSurface(std::string* c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg)
+void Letter::RenderCharOnSurface(std::string* c, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg, float keyHalfWidth, float scaleFactor)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //setup textures
+    //setup textures/shaders
     text3dShader.use();
     text3dShader.setMat4("model", model);
     text3dShader.setMat4("view", view);
@@ -85,21 +85,36 @@ void Letter::RenderCharOnSurface(std::string* c, glm::mat4 model, glm::mat4 view
  
     // Rotate the four quad corners around the key-top center (0, -0.25) in the XZ plane
     float rad = glm::radians(angleDeg);
-    float s = 0.005f;
+
+    // Compute scale so text fills ~80% of the key top width, capped for single-char keys
+    float availableWidth = 2.0f * keyHalfWidth * 0.8f;
+    float totalRawWidth = 0.0f;
+
+    //iterate the characters in the string and sum up their 
+    //advance values to get the total raw width of the text
+    for (char ch : *c)
+        totalRawWidth += (Characters[ch].Advance >> 6);
+    float s = (totalRawWidth > 0.0f) ? (availableWidth / totalRawWidth) : 0.005f;
+    //debugging purpose
+    //std::cout << s << std::endl;
+    s = std::min(s, 0.0085f);
+    // Apply additional scale factor for modifier keys
+    s *= scaleFactor;
+
+    // Precompute rotation values
     float cosA = cosf(rad);
     float sinA = sinf(rad);
     float cx = 0.0f, cz = -0.25f;
+    
+    //lambda to rotate a point (x,z) 
+    //around (cx,cz) by angleDeg in the XZ plane
     auto rotXZ = [&](float x, float z, float &rx, float &rz) {
         float dx = x - cx, dz = z - cz;
         rx = cx + dx * cosA - dz * sinA;
         rz = cz + dx * sinA + dz * cosA;
     };
-    float totalWidth = 0.0f;
-    for (char ch : *c)
-        totalWidth += (Characters[ch].Advance >> 6) * s;
-
-    float xpos = -totalWidth / 2.0f; // Center the text on the key
-    float zpos = -0.15f;
+    float xpos = -(totalRawWidth * s) / 2.0f; // Center the text on the key
+    float zpos = -.3f;
     float ypos = 0.303f; // Slightly above the key surface to prevent
     
     // z-fighting
@@ -116,10 +131,10 @@ void Letter::RenderCharOnSurface(std::string* c, glm::mat4 model, glm::mat4 view
         float zposChar = zpos - (chData.Size.y - chData.Bearing.y) * s;
 
         float x0, z0, x1, z1, x2, z2, x3, z3;
-        rotXZ(xpos,     zpos,     x0, z0);   // top-left
-        rotXZ(xpos,     zpos - h, x1, z1);   // bottom-left
-        rotXZ(xpos + w, zpos - h, x2, z2);   // bottom-right
-        rotXZ(xpos + w, zpos,     x3, z3);   // top-right
+        rotXZ(xposChar,     zposChar + h, x0, z0);  // top-left
+        rotXZ(xposChar,     zposChar,     x1, z1);  // bottom-left
+        rotXZ(xposChar + w, zposChar,     x2, z2);  // bottom-right
+        rotXZ(xposChar + w, zposChar + h, x3, z3);  // top-right
 
         // Quad lying flat in the XZ plane (y constant), rotated around key-top center
         float vertices[6][5] = {

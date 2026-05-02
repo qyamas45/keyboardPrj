@@ -32,7 +32,7 @@ public:
 
     void Draw(std::string*);
     void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
-    void RenderCharOnSurface(std::string*, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg = 0.0f);
+    void RenderCharOnSurface(std::string*, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 color, float angleDeg = 0.0f, float keyHalfWidth = 0.2f, float scaleFactor = 1.0f);
     
 private:
     unsigned int VAO, VBO;

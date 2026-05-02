@@ -81,7 +81,7 @@ void keyboard::setupMesh()
                 x += keys[j].getWidth() + GAP;
             }
         }
-        else if (i < 52) // Fourth row (Left Shift to Right Shift)
+        else if (i < 54) // Fourth row (Left Shift to Right Shift)
         {
             z = 3 * ROW_D;
             for (size_t j{41}; j < i; ++j)
@@ -89,10 +89,18 @@ void keyboard::setupMesh()
                 x += keys[j].getWidth() + GAP;
             }
         }
-        else // Fifth row (Left Ctrl to Right Ctrl)
+        else if (i < 66) // Fifth row (Left Ctrl to Right Ctrl)
         {
             z = 4 * ROW_D;
-            for (size_t j{52}; j < i; ++j)
+            for (size_t j{54}; j < i; ++j)
+            {
+                x += keys[j].getWidth() + GAP;
+            }
+        }
+        else // Fifth row (Left Ctrl to Right Ctrl)
+        {
+            z = 5 * ROW_D;
+            for (size_t j{66}; j < i; ++j)
             {
                 x += keys[j].getWidth() + GAP;
             }
@@ -136,15 +144,15 @@ std::string keyboard::keyToLabel(keyboardKey key)
         case keyboardKey::Z: return "Z";
 
         //special keys
-        case keyboardKey::ENTER: return "Enter";
+        case keyboardKey::ENTER: return "enter";
         case keyboardKey::SPACE: return " ";
-        case keyboardKey::BACKSPACE: return "Backspace";
-        case keyboardKey::RSHIFT: return "RShift";
-        case keyboardKey::LSHIFT: return "LShift";
-        case keyboardKey::LCTRL: return  "Ctrl";
-        case keyboardKey::RCTRL: return  "Ctrl";
-        case keyboardKey::LEFTALT: return "Alt";
-        case keyboardKey::RIGHTALT: return "Alt";
+        case keyboardKey::BACKSPACE: return "backspace";
+        case keyboardKey::RSHIFT: return "rshift";
+        case keyboardKey::LSHIFT: return "lshift";
+        case keyboardKey::LCTRL: return  "ctrl";
+        case keyboardKey::RCTRL: return  "ctrl";
+        case keyboardKey::LEFTALT: return "alt";
+        case keyboardKey::RIGHTALT: return "alt";
         case keyboardKey::F1: return "F1";
         case keyboardKey::F2: return "F2";
         case keyboardKey::F3: return "F3";
@@ -157,9 +165,9 @@ std::string keyboard::keyToLabel(keyboardKey key)
         case keyboardKey::F10: return "F10";
         case keyboardKey::F11: return "F11";
         case keyboardKey::F12: return "F12";
-        case keyboardKey::ESCAPE: return "Esc";
-        case keyboardKey::TAB: return "Tab";
-        case keyboardKey::CAPSLOCK: return "Caps Lock";
+        case keyboardKey::ESCAPE: return "esc";
+        case keyboardKey::TAB: return "tab";
+        case keyboardKey::CAPSLOCK: return "caps lock";
         case keyboardKey::GRAVE: return "`";
         case keyboardKey::MINUS: return "-";
         case keyboardKey::PLUS: return "+";

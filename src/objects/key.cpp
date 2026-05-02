@@ -35,47 +35,47 @@ void Key::offSetSize(float& size)
    //To be honest, I was thinking more of an efficient way of doing this using switch statements
    //and enums, but since we only have a few special keys, this is fine for now. 
    //We can always refactor later if we add more keys with different sizes.
-   if(label == "Enter")
-   {
-    size = 0.5f;
-   }
-   else if (label == "LShift")
-   {
-    
-    size = 0.65f;
-    
-   }
-   else if (label == "RShift")
-   {
-    size = 0.55f;
-   }
-   else if (label == " ")
-   {
-    size = 1.5f;
-   }
-   else if (label == "Backspace")
-   {
-    size = 0.58f;
-   }
-   else if (label == "Ctrl")
-   {
-    size = 0.5f;
-   }
-   else if (label == "Alt")
-   {
-    size = 0.5f;
-   }
-   else if (label == "Tab")
-   {
-    size = 0.2258f;
-   }
-   else if (label == "Caps Lock")
+   if(label == "enter")
    {
     size = 0.57f;
    }
-   else if (label == "Pipe")
+   else if (label == "lshift")
    {
+    
     size = 0.52f;
+    
+   }
+   else if (label == "rshift")
+   {
+    size = 0.69f;
+   }
+   else if (label == " ")
+   {
+    size = 1.92f;
+   }
+   else if (label == "backspace")
+   {
+    size = 0.58f;
+   }
+   else if (label == "ctrl")
+   {
+    size = 0.23f;
+   }
+   else if (label == "alt")
+   {
+    size = 0.55f;
+   }
+   else if (label == "tab")
+   {
+    size = 0.2258f;
+   }
+   else if (label == "caps lock")
+   {
+    size = 0.325f;
+   }
+   else if (label == "\\")
+   {
+    size = 0.35f;
    }
 }
 
@@ -181,8 +181,15 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
     std::string* labelPtr = &label;
     if (labelPtr)
     {
-        
-        letter.RenderCharOnSurface(labelPtr, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f);
+        float scaleFactor = 1.0f;
+        if (label.size() == 1)
+            scaleFactor = 0.7f;   // A–Z, digits, symbols
+        else if (label == "shift" || label == "lshift" || label == "rshift" ||
+                 label == "ctrl"  || label == "alt"    || label == "tab"    ||
+                 label == "caps lock" || label == "enter" || label == "backspace")
+            scaleFactor = 0.8f;   // modifier / function keys
+
+        letter.RenderCharOnSurface(labelPtr, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f, 0.2f + adjustedSize, scaleFactor);
         labelPtr++;
     }
         
