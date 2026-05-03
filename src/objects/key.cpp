@@ -197,10 +197,29 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 void Key::press(int action, int key)
 {
  
-    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+   if (key == GLFW_KEY_A && action == GLFW_PRESS)
+   {
+       std::cout << "Key A pressed!" << std::endl;
+   }
+    if (action == GLFW_PRESS)
     {
-        std::cout << "TEST";
+        switch(key)
+        {
+            case GLFW_KEY_A:
+                std::cout << "Key A pressed!" << std::endl;
+                break;
+            case GLFW_KEY_B:
+                std::cout << "Key B pressed!" << std::endl;
+                break;
+            // Add cases for other keys as needed
+            case GLFW_KEY_SPACE:
+                std::cout << "Space key pressed!" << std::endl;
+                break;
+            default:
+                std::cout << "Key " << key << " pressed!" << std::endl;
+        }
     }
+  
 }
 
 void Key::keyCallBack(GLFWwindow* window, int key, int scancode, int action, int mods)

@@ -8,7 +8,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <shader.h>
 #include "key.h"
-
+#include "inputManager.h"
+//This is the class that will represent the entire keyboard. 
+//It will contain a vector of Key objects, and will be responsible for drawing the keyboard and handling input.
 enum class keyboardKey{
     ESCAPE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
     GRAVE, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, ZERO, MINUS, PLUS, BACKSPACE, 
@@ -22,9 +24,11 @@ enum class keyboardKey{
 
 class keyboard{ 
 public:
+    inputManager manager;
     keyboard();
     ~keyboard();
     static std::string keyToLabel(keyboardKey);
+    static int keyToGLFWKey(keyboardKey);
     void Draw(Shader&, glm::mat4, glm::mat4);
     void pressKey(keyboardKey);
     void releaseKey(keyboardKey);

@@ -123,7 +123,8 @@ int main() {
     GLfloat halfScreenHeight = SCR_HEIGHT / 2.0f;
 
     ourShader.use();
-     
+    glfwSetWindowUserPointer(window, &kb.manager); // Set the user pointer to the input manager
+    glfwSetKeyCallback(window, Key::keyCallBack);
     while(!glfwWindowShouldClose(window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -132,10 +133,10 @@ int main() {
 
         //input
         //input handler Manager
-        //glfwSetWindowUserPointer(window, &manager);
+        
         
         processInput(window);
-        //glfwSetKeyCallback(window, Key::keyCallBack);
+        
 
         //render
       

@@ -2,6 +2,7 @@
 
 keyboard::keyboard()
 {
+     
     // Initialize keys vector with the appropriate number of keys based on the enum
     keys.reserve(static_cast<size_t>(keyboardKey::KEY_COUNT));
     // Populate the keys vector with Key objects, 
@@ -9,10 +10,11 @@ keyboard::keyboard()
     for(int i{}; i < static_cast<int>(keyboardKey::KEY_COUNT); ++i)
     {
         keyboardKey keyEnum = static_cast<keyboardKey>(i);
-        keys.emplace_back(keyToLabel(keyEnum)); 
-
+        keys.emplace_back(keyToLabel(keyEnum));
+        keys.back().GLFWKey = keyToGLFWKey(keyEnum);
+        manager.keys.push_back(&keys.back());
+        manager.keyStates.push_back(false);
     }
-
     setupMesh();
 
 }
@@ -27,17 +29,24 @@ void keyboard::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
     for(Key& key : keys)
     {
- 
         key.Draw(shader, view, projection);
     }
+    //glfwSetWindowUserPointer(glfwGetCurrentContext(), &manager); // Clear the user pointer after drawing
 }
 void keyboard::pressKey(keyboardKey key)
 {
-
+        
+    int idx = static_cast<int>(key);
+    if (idx >= 0 && idx < (int)keys.size())
+    {
+        keys[idx].press(GLFW_PRESS, keys[idx].GLFWKey);
+    }
 }
 void keyboard::releaseKey(keyboardKey key)
 {
-
+    int idx = static_cast<int>(key);
+    if (idx >= 0 && idx < (int)keys.size())
+        keys[idx].release();
 }
 
 void keyboard::setupMesh()
@@ -124,6 +133,86 @@ void keyboard::setupMesh()
     }
 }
 
+int keyboard::keyToGLFWKey(keyboardKey key)
+{
+    switch (key)
+    {
+        case keyboardKey::A: return GLFW_KEY_A;
+        case keyboardKey::B: return GLFW_KEY_B;
+        case keyboardKey::C: return GLFW_KEY_C;
+        case keyboardKey::D: return GLFW_KEY_D;
+        case keyboardKey::E: return GLFW_KEY_E;
+        case keyboardKey::F: return GLFW_KEY_F;
+        case keyboardKey::G: return GLFW_KEY_G;
+        case keyboardKey::H: return GLFW_KEY_H;
+        case keyboardKey::I: return GLFW_KEY_I;
+        case keyboardKey::J: return GLFW_KEY_J;
+        case keyboardKey::K: return GLFW_KEY_K;
+        case keyboardKey::L: return GLFW_KEY_L;
+        case keyboardKey::M: return GLFW_KEY_M;
+        case keyboardKey::N: return GLFW_KEY_N;
+        case keyboardKey::O: return GLFW_KEY_O;
+        case keyboardKey::P: return GLFW_KEY_P;
+        case keyboardKey::Q: return GLFW_KEY_Q;
+        case keyboardKey::R: return GLFW_KEY_R;
+        case keyboardKey::S: return GLFW_KEY_S;
+        case keyboardKey::T: return GLFW_KEY_T;
+        case keyboardKey::U: return GLFW_KEY_U;
+        case keyboardKey::V: return GLFW_KEY_V;
+        case keyboardKey::W: return GLFW_KEY_W;
+        case keyboardKey::X: return GLFW_KEY_X;
+        case keyboardKey::Y: return GLFW_KEY_Y;
+        case keyboardKey::Z: return GLFW_KEY_Z;
+
+        case keyboardKey::ESCAPE:    return GLFW_KEY_ESCAPE;
+        case keyboardKey::F1:        return GLFW_KEY_F1;
+        case keyboardKey::F2:        return GLFW_KEY_F2;
+        case keyboardKey::F3:        return GLFW_KEY_F3;
+        case keyboardKey::F4:        return GLFW_KEY_F4;
+        case keyboardKey::F5:        return GLFW_KEY_F5;
+        case keyboardKey::F6:        return GLFW_KEY_F6;
+        case keyboardKey::F7:        return GLFW_KEY_F7;
+        case keyboardKey::F8:        return GLFW_KEY_F8;
+        case keyboardKey::F9:        return GLFW_KEY_F9;
+        case keyboardKey::F10:       return GLFW_KEY_F10;
+        case keyboardKey::F11:       return GLFW_KEY_F11;
+        case keyboardKey::F12:       return GLFW_KEY_F12;
+        case keyboardKey::GRAVE:     return GLFW_KEY_GRAVE_ACCENT;
+        case keyboardKey::ONE:       return GLFW_KEY_1;
+        case keyboardKey::TWO:       return GLFW_KEY_2;
+        case keyboardKey::THREE:     return GLFW_KEY_3;
+        case keyboardKey::FOUR:      return GLFW_KEY_4;
+        case keyboardKey::FIVE:      return GLFW_KEY_5;
+        case keyboardKey::SIX:       return GLFW_KEY_6;
+        case keyboardKey::SEVEN:     return GLFW_KEY_7;
+        case keyboardKey::EIGHT:     return GLFW_KEY_8;
+        case keyboardKey::NINE:      return GLFW_KEY_9;
+        case keyboardKey::ZERO:      return GLFW_KEY_0;
+        case keyboardKey::MINUS:     return GLFW_KEY_MINUS;
+        case keyboardKey::PLUS:      return GLFW_KEY_EQUAL;
+        case keyboardKey::BACKSPACE: return GLFW_KEY_BACKSPACE;
+        case keyboardKey::TAB:       return GLFW_KEY_TAB;
+        case keyboardKey::BRACKL:    return GLFW_KEY_LEFT_BRACKET;
+        case keyboardKey::BRACKR:    return GLFW_KEY_RIGHT_BRACKET;
+        case keyboardKey::PIPE:      return GLFW_KEY_BACKSLASH;
+        case keyboardKey::CAPSLOCK:  return GLFW_KEY_CAPS_LOCK;
+        case keyboardKey::SEMICOLON: return GLFW_KEY_SEMICOLON;
+        case keyboardKey::APOSTROPHE:return GLFW_KEY_APOSTROPHE;
+        case keyboardKey::ENTER:     return GLFW_KEY_ENTER;
+        case keyboardKey::LSHIFT:    return GLFW_KEY_LEFT_SHIFT;
+        case keyboardKey::RSHIFT:    return GLFW_KEY_RIGHT_SHIFT;
+        case keyboardKey::COMMA:     return GLFW_KEY_COMMA;
+        case keyboardKey::PERIOD:    return GLFW_KEY_PERIOD;
+        case keyboardKey::SLASH:     return GLFW_KEY_SLASH;
+        case keyboardKey::LCTRL:     return GLFW_KEY_LEFT_CONTROL;
+        case keyboardKey::RCTRL:     return GLFW_KEY_RIGHT_CONTROL;
+        case keyboardKey::LEFTALT:   return GLFW_KEY_LEFT_ALT;
+        case keyboardKey::RIGHTALT:  return GLFW_KEY_RIGHT_ALT;
+        case keyboardKey::SPACE:     return GLFW_KEY_SPACE;
+        case keyboardKey::KEY_COUNT: return -1;
+    }
+    return -1;
+}
 //Util function
 std::string keyboard::keyToLabel(keyboardKey key)
 {

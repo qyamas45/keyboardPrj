@@ -9,10 +9,12 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
+ 
 class Key
 {
 public:
     Letter letter;
+    int GLFWKey; 
     Key(std::string);
     ~Key();
  
