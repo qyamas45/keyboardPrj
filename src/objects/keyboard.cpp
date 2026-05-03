@@ -61,8 +61,22 @@ void keyboard::setupMesh()
         {
             z = 0.0f;
             for (size_t j{}; j < i; ++j)
-            {
+            {   
+                //std::cout << "Key: " << keys[j].label << ", width: " << keys[j].getWidth() << std::endl; // Debug output
+                //Create a an extra grap between F1-F12 and the rest of the keys to visually separate them
+                if (j == 0) // After F12
+                    x += 0.6f; // Extra gap after F12
+                
+                else if(j == 4) // After F1-F4
+                    x += 0.6f; // Extra gap after F1-F4
+                
+                else if (j == 8) // After F5-F8
+                    x += 0.6f; // Extra gap after F5-F8
+                
+                else if (j == 12) // After F9-F12
+                    x += 0.6f; // Extra gap after F9-F12
                 x += keys[j].getWidth() + GAP;
+              
             }
         }
         else if (i < 27) // Second row (Tab to Backspace)
