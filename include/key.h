@@ -17,8 +17,6 @@ public:
     int GLFWKey; 
     Key(std::string);
     ~Key();
- 
-
     glm::vec3 position;
     glm::vec3 rotationAxis;
     float rotationAngle;

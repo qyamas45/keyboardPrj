@@ -196,28 +196,16 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 }
 void Key::press(int action, int key)
 {
- 
-   if (key == GLFW_KEY_A && action == GLFW_PRESS)
-   {
-       std::cout << "Key A pressed!" << std::endl;
-   }
+   //PROTOTYPE: This function will eventually handle the visual and functional response to a key press, such as changing the key's color or triggering an animation. 
+   //           For now, it just prints the key and action to the console for debugging purposes.
+   //if (key == GLFW_KEY_A && action == GLFW_PRESS)
+   //{
+   //    std::cout << "Key A pressed!" << std::endl;
+   //}
     if (action == GLFW_PRESS)
     {
-        switch(key)
-        {
-            case GLFW_KEY_A:
-                std::cout << "Key A pressed!" << std::endl;
-                break;
-            case GLFW_KEY_B:
-                std::cout << "Key B pressed!" << std::endl;
-                break;
-            // Add cases for other keys as needed
-            case GLFW_KEY_SPACE:
-                std::cout << "Space key pressed!" << std::endl;
-                break;
-            default:
-                std::cout << "Key " << key << " pressed!" << std::endl;
-        }
+        if (key)
+            std:: cout << "Key " << key << " pressed!" << std::endl;
     }
   
 }
