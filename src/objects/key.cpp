@@ -202,10 +202,23 @@ void Key::press(int action, int key)
    //{
    //    std::cout << "Key A pressed!" << std::endl;
    //}
+    float yOffset = 0.05f; // Example offset value for key press animation
+
     if (action == GLFW_PRESS)
     {
-        if (key)
-            std:: cout << "Key " << key << " pressed!" << std::endl;
+        //debugging output to verify that the correct key and action are being detected
+        //if (key)
+        //    std:: cout << "Key " << key << " pressed!" << std::endl;
+        //when user presses key, the key will go down and change color to indicate it's being pressed. When the key is released, it will return to its original color.
+        //This will be implemented by changing the key's color in the shader and adjusting the position
+        position.y -= yOffset; // Move the key down by the offset value
+         
+    }
+    if(action == GLFW_RELEASE)
+    {
+        //when user releases key, the key will return to its original position and color. This will be implemented by changing the key's color in the shader and adjusting the position back to its original state.
+
+        position.y += yOffset; // Move the key back up by the offset value
     }
   
 }
