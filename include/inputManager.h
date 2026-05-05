@@ -14,7 +14,7 @@ public:
             if(k->GLFWKey == key)
             {
             //std::cout << "Handling key: " << key << " with action: " << action << std::endl; // Debug output
-                k->press(action, key);
+                k->press( action, key);
                 break;
             }
         }

@@ -1,7 +1,8 @@
 #include "key.h"
 #include "inputManager.h"   
 
-Key::Key(std::string let) : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f)
+Key::Key(std::string let) : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), 
+                            rotationAngle(0.0f), scale(1.0f) 
 {
     label = let;
     position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -170,11 +171,17 @@ unsigned int indices[] = {
 void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
     shader.use();
+    shader.setBool("useKeyColor", isPressed);
+    if (isPressed){
+        std::cout << "Key " << label << " is pressed!" << std::endl; // Debug output
+        shader.setVec3("keyColor", glm::vec3(1.0f, 0.5f, 0.0f));
+    }
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
     model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::scale(model, scale);
     shader.setMat4("model", model);
+     
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     
@@ -211,7 +218,9 @@ void Key::press(int action, int key)
         //    std:: cout << "Key " << key << " pressed!" << std::endl;
         //when user presses key, the key will go down and change color to indicate it's being pressed. When the key is released, it will return to its original color.
         //This will be implemented by changing the key's color in the shader and adjusting the position
+        
         position.y -= yOffset; // Move the key down by the offset value
+        isPressed = true; // Set the key as pressed to change its color in the shader
          
     }
     if(action == GLFW_RELEASE)
@@ -219,6 +228,7 @@ void Key::press(int action, int key)
         //when user releases key, the key will return to its original position and color. This will be implemented by changing the key's color in the shader and adjusting the position back to its original state.
 
         position.y += yOffset; // Move the key back up by the offset value
+        isPressed = false; // Set the key as not pressed to change its color back in the shader
     }
   
 }

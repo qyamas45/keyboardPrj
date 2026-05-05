@@ -13,6 +13,7 @@
 class Key
 {
 public:
+
     Letter letter;
     int GLFWKey; 
     Key(std::string);
@@ -30,6 +31,7 @@ public:
     void offSetSize(float&);
     float getWidth() const;
     float adjustedSize = 0.0f; 
+    bool isPressed = false;
 private:
     unsigned int VAO3D, VBO3D;
     unsigned int VAO, VBO, EBO;

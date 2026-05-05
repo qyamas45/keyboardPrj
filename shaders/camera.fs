@@ -1,6 +1,7 @@
 #version 330 core
 out vec4 FragColor;
-
+uniform vec3 keyColor;
+uniform bool useKeyColor;
  
 in vec3 ourColor;
 // texture samplers
@@ -11,6 +12,7 @@ void main()
 {
 	// linearly interpolate between both textures (80% container, 20% awesomeface)
 	//between [0, 1]
-	FragColor = vec4(ourColor, 1.0);
+	vec3 color = useKeyColor ? keyColor : ourColor;
+    FragColor = vec4(color, 1.0);
 
 }
