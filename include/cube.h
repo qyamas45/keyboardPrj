@@ -22,6 +22,9 @@ public:
     glm::vec3 rotationAxis;
     float rotationAngle;
     glm::vec3 scale;
+    glm::vec3 color;
+    bool useCustomColor = false;
+    void setColor(glm::vec3 color);
     void Draw(Shader &shader);
 
 private:

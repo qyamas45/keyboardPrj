@@ -27,6 +27,9 @@ keyboard::~keyboard()
 
 void keyboard::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
+    shader.setMat4("view", view);
+    shader.setMat4("projection", projection);
+    base.Draw(shader);
     for(Key& key : keys)
     {
         key.Draw(shader, view, projection);
@@ -53,6 +56,10 @@ void keyboard::setupMesh()
 {
     const float GAP = 0.05f; // Gap between keys
     const float ROW_D = 0.75f; // Height of each row
+    // Compute keyboard footprint
+    const float PADDING = 0.9f;
+    const float BASE_THICK = 0.2f;
+    const float KEY_DEPTH = ROW_D;
     //Define rows as indexs ranges into keys[] (matching in order)
     //for each row:
     //float x = rowStartX; // Starting x position for the row
@@ -131,6 +138,17 @@ void keyboard::setupMesh()
         //std::cout << "Key: " << keys[i].label << ", x: " << x << ", y: " << y << std::endl; // Debug output
         keys[i].position = glm::vec3(x + keys[i].getWidth() / 2.0f, 0.0f, z);
     }
+    //create the flat base of  the keyboard
+    float maxX = 0.0f;
+    for (const auto& k : keys)
+        maxX = std::max(maxX, k.position.x + k.getWidth() / 2.0f);
+
+    float minZ = -KEY_DEPTH / 2.0f;
+    float maxZ =  5.0f * ROW_D + KEY_DEPTH / 2.0f;
+
+    base.position = glm::vec3(maxX / 2.0f, -BASE_THICK / 0.78f, (minZ + maxZ) / 2.0f);
+    base.scale    = glm::vec3(maxX + PADDING, BASE_THICK + 0.2, (maxZ - minZ) + PADDING);
+    
 }
 
 int keyboard::keyToGLFWKey(keyboardKey key)

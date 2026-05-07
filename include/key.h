@@ -23,6 +23,8 @@ public:
     float rotationAngle;
     glm::vec3 scale;
     std::string label;
+    glm::vec3 color;
+    void setColor(glm::vec3 color);
     void setKeyType(std::string);
     void Draw(Shader&, glm::mat4, glm::mat4);
     void press(int, int);
@@ -32,6 +34,7 @@ public:
     float getWidth() const;
     float adjustedSize = 0.0f; 
     bool isPressed = false;
+    bool customColor = false;
 private:
     unsigned int VAO3D, VBO3D;
     unsigned int VAO, VBO, EBO;

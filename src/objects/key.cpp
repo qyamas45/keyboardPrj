@@ -2,7 +2,7 @@
 #include "inputManager.h"   
 
 Key::Key(std::string let) : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), 
-                            rotationAngle(0.0f), scale(1.0f) 
+                            rotationAngle(0.0f), scale(1.0f), color(1.0f)
 {
     label = let;
     position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -168,20 +168,28 @@ unsigned int indices[] = {
     glEnableVertexAttribArray(1);
 
 }
+void Key::setColor(glm::vec3 newColor)
+{
+    color = newColor;
+    customColor = true;
+}
+
 void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
     shader.use();
     shader.setBool("useKeyColor", isPressed);
     if (isPressed){
-        std::cout << "Key " << label << " is pressed!" << std::endl; // Debug output
-        shader.setVec3("keyColor", glm::vec3(1.0f, 0.5f, 0.0f));
+        //std::cout << "Key " << label << " is pressed!" << std::endl; // Debug output
+        shader.setVec3("keyColor", glm::vec3(1.0f, 1.0f, 1.0f));
     }
+    shader.setVec3("keyColor", color);
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
     model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::scale(model, scale);
     shader.setMat4("model", model);
-     
+ 
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     

@@ -9,6 +9,7 @@
 #include <shader.h>
 #include "key.h"
 #include "inputManager.h"
+#include "cube.h"
 //This is the class that will represent the entire keyboard. 
 //It will contain a vector of Key objects, and will be responsible for drawing the keyboard and handling input.
 enum class keyboardKey{
@@ -32,6 +33,7 @@ public:
     void Draw(Shader&, glm::mat4, glm::mat4);
     void pressKey(keyboardKey);
     void releaseKey(keyboardKey);
+    Cube base;
     std::vector<Key> keys;
 private:
     unsigned int VAO, VBO, EBO;

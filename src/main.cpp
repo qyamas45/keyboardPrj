@@ -90,16 +90,17 @@ int main() {
     //};
     Cube cube1;
     Cube cube2;
-    Key key1("LShift");
+    //Key key1("LShift");
     Letter letter1;
     keyboard kb;
+    kb.base.setColor(glm::vec3(0.05f, 0.05f, 0.05f));
     //for(auto& k: kb.keys)
     //{
     //    std::cout << k.label << std::endl;
     //}
     //inputManager manager;
     //manager.keys.push_back(&key1);    
-    key1.position = glm::vec3(5.0f, 0.0f, 0.0f);
+ 
  
     cube1.position = glm::vec3(-5.0f, 0.0f, 0.0f);
     unsigned int VBO, VAO, EBO;

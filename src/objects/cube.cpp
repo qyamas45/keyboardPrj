@@ -1,12 +1,13 @@
 #include "cube.h"
 
-Cube::Cube() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), rotationAngle(0.0f), scale(1.0f)
+Cube::Cube() : position(0.0f), rotationAxis(0.0f, 1.0f, 0.0f), 
+rotationAngle(0.0f), scale(1.0f), color(1.0f), useCustomColor(false)
 {
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
     rotationAngle = 0.0f;
     scale = glm::vec3(1.0f);
-
+    
     setupMesh();
 }
 Cube::~Cube()
@@ -15,7 +16,14 @@ Cube::~Cube()
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 }
+void Cube::setColor(glm::vec3 color)
+{
+    // This function can be implemented to change the color of the cube by updating the vertex data or using a uniform in the shader.
+    // For now, it's just a placeholder to indicate where color-setting logic would go.
+    this->color = color;
+    useCustomColor = true; // Indicate that a custom color should be used when drawing the cube
 
+}
 void Cube::setupMesh()
 {
     float vertices[] = {
@@ -89,6 +97,9 @@ void Cube::Draw(Shader& shader)
     model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis);
     model = glm::scale(model, scale);
     shader.setMat4("model", model);
+    shader.setBool("useKeyColor", useCustomColor);
+    if (useCustomColor)
+        shader.setVec3("keyColor", color);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
