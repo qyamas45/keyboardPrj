@@ -1,8 +1,10 @@
 # 3D Keyboard Visualizer
 
 A real-time 3D keyboard rendered in C++ with OpenGL. Every key press is detected from actual keyboard input and reflected visually — the key animates downward and highlights to show it's being pressed.
+<img width="796" height="626" alt="image" src="https://github.com/user-attachments/assets/4e06acb0-1b0c-4bab-ae4b-e33e2a5d1711" />
 
-> Add a screenshot or GIF here to show the keyboard in action.
+<img width="796" height="626" alt="image" src="https://github.com/user-attachments/assets/d0ab2003-5f23-4a21-8d59-d1f550da5de3" />
+
 
 ---
 
@@ -111,3 +113,4 @@ keyboard_prj/
 └── src/resources/fonts/
     └── Monocraft.ttf
 ```
+Sources: https://learnopengl.com
