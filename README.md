@@ -114,10 +114,22 @@ keyboard_prj/
     └── Monocraft.ttf
 ```
 ### Sources for this project was written from scratch, but I heavily referenced the following resources to learn OpenGL and implement features:
-learnopengl.com — the go-to free tutorial site that covers everything used in this project
-docs.gl — OpenGL function reference
-OpenGL SuperBible — book for going deeper
-learncpp.com and cppreference.com — the two most useful C++ learning resources
-A Tour of C++ by Stroustrup for a more advanced read
-A small "tips from this project" note with honest advice about how to get the most out of those resources
+- learnopengl.com — the go-to free tutorial site that covers everything used in this project
+- docs.gl — OpenGL function reference
+- OpenGL SuperBible — book for going deeper
+- learncpp.com and cppreference.com — the two most useful C++ learning resources
+- A Tour of C++ by Stroustrup for a more advanced read
 
+### Reflection/Improvements:
+Overall this is a beginning project for me to learn how to use OpenGL. After creating this project, there is some pointers where I can improve upon this project for the next upcoming project to learn more about certain topics.
+### 1. O(n²) layout in `setupMesh()` on key.cpp
+**What's wrong:** For every key, the code loops from the row start back to that key's index to sum up the x position. That's recalculating work already done for every previous key in the row.  
+
+### 2. No shared base class for `Cube` and `Key`
+**What's wrong:** Both classes independently declare `position`, `scale`, `rotationAxis`, `rotationAngle`, and their own VAO/VBO/EBO management. Any future object type will repeat the same boilerplate.  
+
+### 3. Window resize breaks the 3D projection
+**What's wrong:** `framebuffer_size_callback` only calls `glViewport` — the projection matrix aspect ratio is hardcoded as `800.0f / 600.0f` in the render loop. Resizing the window will stretch or squash the 3D scene. 
+
+### 4. Unused Variables upon different .h files.
+**What's wrong:**  Uneeded variables upon classes that weren't being used such as VAO3D and VBO3D on key.h.
