@@ -113,6 +113,96 @@ keyboard_prj/
 └── src/resources/fonts/
     └── Monocraft.ttf
 ```
+## Class Diagram (UML)
+
+```mermaid
+classDiagram
+    class keyboard {
+        +inputManager manager
+        +Cube base
+        +vector~Key~ keys
+        +vec3 position
+        +vec3 scale
+        +Draw(Shader, mat4, mat4)
+        +pressKey(keyboardKey)
+        +releaseKey(keyboardKey)
+        -uint VAO, VBO, EBO
+        -setupMesh()
+        +keyToLabel(keyboardKey) string
+        +keyToGLFWKey(keyboardKey) int
+    }
+
+    class Key {
+        +Letter letter
+        +int GLFWKey
+        +vec3 position
+        +vec3 scale
+        +string label
+        +vec3 color
+        +float adjustedSize
+        +bool isPressed
+        +bool customColor
+        +Draw(Shader, mat4, mat4, mat4)
+        +press(int, int)
+        +release()
+        +setColor(vec3)
+        +getWidth() float
+        +offSetSize(float~)
+        -uint VAO, VBO, EBO
+        -setupMesh()
+    }
+
+    class Cube {
+        +vec3 position
+        +vec3 scale
+        +vec3 rotationAxis
+        +float rotationAngle
+        +vec3 color
+        +bool useCustomColor
+        +Draw(Shader, mat4)
+        +setColor(vec3)
+        -uint VAO, VBO
+        -setupMesh()
+    }
+
+    class Letter {
+        +map~char, Character~ Characters
+        +Draw(string*)
+        +RenderText(string, float, float, float, vec3)
+        +RenderCharOnSurface(string*, mat4, mat4, mat4, vec3, float, float, float)
+        -Shader textShader
+        -Shader text3dShader
+        -FT_Library ft
+        -FT_Face face
+        -uint VAO, VBO, VAO3D, VBO3D
+        -setupMesh()
+    }
+
+    class inputManager {
+        +vector~Key*~ keys
+        +vector~bool~ keyStates
+        +handleKey(int, int)
+    }
+
+    class Character {
+        +uint TextureID
+        +ivec2 Size
+        +ivec2 Bearing
+        +uint Advance
+    }
+
+    keyboard "1" *-- "1" inputManager : owns
+    keyboard "1" *-- "1" Cube : base
+    keyboard "1" *-- "66" Key : keys
+    Key "1" *-- "1" Letter : owns
+    Letter "1" *-- "128" Character : glyph cache
+    inputManager "1" o-- "66" Key : raw pointers
+```
+
+> **Notation:** `*--` = composition (owns and manages lifetime) · `o--` = aggregation (holds a reference)
+
+---
+
 ### Sources for this project was written from scratch, but I heavily referenced the following resources to learn OpenGL and implement features:
 - learnopengl.com — the go-to free tutorial site that covers everything used in this project
 - docs.gl — OpenGL function reference
