@@ -113,4 +113,11 @@ keyboard_prj/
 └── src/resources/fonts/
     └── Monocraft.ttf
 ```
-Sources: https://learnopengl.com
+### Sources for this project was written from scratch, but I heavily referenced the following resources to learn OpenGL and implement features:
+learnopengl.com — the go-to free tutorial site that covers everything used in this project
+docs.gl — OpenGL function reference
+OpenGL SuperBible — book for going deeper
+learncpp.com and cppreference.com — the two most useful C++ learning resources
+A Tour of C++ by Stroustrup for a more advanced read
+A small "tips from this project" note with honest advice about how to get the most out of those resources
+
