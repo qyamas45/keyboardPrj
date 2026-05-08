@@ -199,7 +199,7 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection,
     if (labelPtr)
     {
         float scaleFactor = 1.0f;
-        if (label.size() == 1)
+        if (!label.empty() && label.length() == 1)
             scaleFactor = 0.7f;   // A–Z, digits, symbols
         else if (label == "shift" || label == "lshift" || label == "rshift" ||
                  label == "ctrl"  || label == "alt"    || label == "tab"    ||
@@ -207,7 +207,7 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection,
             scaleFactor = 0.8f;   // modifier / function keys
 
         letter.RenderCharOnSurface(labelPtr, worldModel, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f, 0.2f + adjustedSize, scaleFactor);
-        labelPtr++;
+  
     }
         
 }
