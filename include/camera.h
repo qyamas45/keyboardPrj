@@ -57,7 +57,16 @@ public:
         Pitch = pitch;
         updateCameraVectors();
     }
-
+    void setYaw(float newYaw)
+    {
+        Yaw = newYaw;
+        updateCameraVectors();
+    }
+    void setPitch(float newPitch)
+    {
+        Pitch = newPitch;
+        updateCameraVectors();
+    }
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix()
     {
