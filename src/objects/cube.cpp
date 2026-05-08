@@ -90,13 +90,13 @@ void Cube::setupMesh()
     glEnableVertexAttribArray(1);
  
 }
-void Cube::Draw(Shader& shader)
+void Cube::Draw(Shader& shader, glm::mat4 parentModel = glm::mat4(1.0f))
 {
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
     model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis);
     model = glm::scale(model, scale);
-    shader.setMat4("model", model);
+    shader.setMat4("model", parentModel * model);
     shader.setBool("useKeyColor", useCustomColor);
     if (useCustomColor)
         shader.setVec3("keyColor", color);

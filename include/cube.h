@@ -25,7 +25,7 @@ public:
     glm::vec3 color;
     bool useCustomColor = false;
     void setColor(glm::vec3 color);
-    void Draw(Shader &shader);
+    void Draw(Shader &shader, glm::mat4);
 
 private:
     unsigned int VAO, VBO, EBO;

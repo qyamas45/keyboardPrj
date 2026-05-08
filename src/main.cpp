@@ -27,7 +27,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
  
-Camera camera(glm::vec3(3.0f, 1.5f, 6.0f));
+Camera camera(glm::vec3(3.0f, 4.0f, 8.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, -45.0f);
+ 
  
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -95,6 +96,7 @@ int main() {
     Letter letter1;
     keyboard kb;
     kb.base.setColor(glm::vec3(0.05f, 0.05f, 0.05f));
+  
     //for(auto& k: kb.keys)
     //{
     //    std::cout << k.label << std::endl;

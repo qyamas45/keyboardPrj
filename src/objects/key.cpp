@@ -174,7 +174,8 @@ void Key::setColor(glm::vec3 newColor)
     customColor = true;
 }
 
-void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
+void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection, 
+    glm::mat4 parentModel=glm::mat4(1.0f))
 {
     shader.use();
     shader.setBool("useKeyColor", isPressed);
@@ -187,7 +188,8 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
     model = glm::translate(model, position);
     model = glm::rotate(model, 0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::scale(model, scale);
-    shader.setMat4("model", model);
+    glm::mat4 worldModel = parentModel * model;
+    shader.setMat4("model", worldModel);
  
 
     glBindVertexArray(VAO);
@@ -204,7 +206,7 @@ void Key::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
                  label == "caps lock" || label == "enter" || label == "backspace")
             scaleFactor = 0.8f;   // modifier / function keys
 
-        letter.RenderCharOnSurface(labelPtr, model, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f, 0.2f + adjustedSize, scaleFactor);
+        letter.RenderCharOnSurface(labelPtr, worldModel, view, projection, glm::vec3(0.0f, 0.0f, 0.0f), 180.0f, 0.2f + adjustedSize, scaleFactor);
         labelPtr++;
     }
         

@@ -29,10 +29,13 @@ void keyboard::Draw(Shader &shader, glm::mat4 view, glm::mat4 projection)
 {
     shader.setMat4("view", view);
     shader.setMat4("projection", projection);
-    base.Draw(shader);
+    
+    glm::mat4 parentModel = glm::mat4(1.0f);
+    parentModel = glm::translate(parentModel, scale);
+    base.Draw(shader, parentModel);
     for(Key& key : keys)
     {
-        key.Draw(shader, view, projection);
+        key.Draw(shader, view, projection, parentModel);
     }
     //glfwSetWindowUserPointer(glfwGetCurrentContext(), &manager); // Clear the user pointer after drawing
 }

@@ -33,6 +33,7 @@ public:
     void Draw(Shader&, glm::mat4, glm::mat4);
     void pressKey(keyboardKey);
     void releaseKey(keyboardKey);
+    glm::vec3 scale = glm::vec3(1.0f);
     Cube base;
     std::vector<Key> keys;
 private:

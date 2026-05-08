@@ -26,7 +26,7 @@ public:
     glm::vec3 color;
     void setColor(glm::vec3 color);
     void setKeyType(std::string);
-    void Draw(Shader&, glm::mat4, glm::mat4);
+    void Draw(Shader&, glm::mat4, glm::mat4,  glm::mat4);
     void press(int, int);
     static void keyCallBack(GLFWwindow*, int, int, int, int);
     void release();
